@@ -11,7 +11,7 @@ This Repository is used to store all composite actions that other projects and a
 
 ### CI maven Build and Package Push:
 
-#### call:  DigitalInnovation/mns-central-actions/workflows/CI@v1
+#### call:  DigitalInnovation/cloud-devsecops-pipelineactions/workflows/CI@v1
 
 inputs:
 
@@ -25,7 +25,7 @@ inputs:
 
 ### Push Image built to ACR
 
-#### call: DigitalInnovation/mns-central-actions/workflows/push\_image@main
+#### call: DigitalInnovation/cloud-devsecops-pipelineactions/workflows/push\_image@main
 
 Inputs:
 
@@ -35,9 +35,9 @@ Inputs:
 - **cr\_password: ${{ secrets.ACR\_PASS }}** 		> *containder registry password*
 - **cr\_servername: ${{ secrets.ACR\_SERVER }}** 	> *containder registry servername*
 
-### SNYC Scan
+### SNYK Scan
 
-#### call: gDigitalInnovation/mns-central-actions/workflows/appsec@main
+#### call: gDigitalInnovation/cloud-devsecops-pipelineactions/workflows/appsec@main
 
 Input:
 
@@ -45,7 +45,7 @@ Input:
 
 ### Fortify Scan
 
-#### call: DigitalInnovation/mns-central-actions/workflows/Fortify@main
+#### call: DigitalInnovation/cloud-devsecops-pipelineactions/workflows/Fortify@main
 
 Input:
 
