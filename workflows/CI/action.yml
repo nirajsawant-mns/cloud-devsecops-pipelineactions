@@ -17,6 +17,10 @@ inputs:
   settings_file_name:
     required: false
     default: settings.xml
+  build_stages: 
+    required: false
+    default: 'clean install deploy'
+    
   az_artifact_repository_pat:
     required: false
   
