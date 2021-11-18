@@ -9,21 +9,20 @@ This repository is used to store reusable composite actions that other product t
 
 ### CI maven Build and Package Push:
 
-#### call:  DigitalInnovation/cloud-devsecops-pipelineactions/workflows/CI@v1
+#### call:  DigitalInnovation/cloud-devsecops-pipelineactions/workflows/CI@latest
 
 inputs:
-
+- **build\_tool: maven** 		`{` *build tools you are using, we support maven and gradle more tools will be added* `}`
 - **pom\_path: .** 				 `{` *path to the pom file default = .* `}`
 - **pom\_file\_name: pom.xml** `{` *Pom file name , default = pom.xml* `}`
-- **pom\_file\_name: pom.xml** 	`{` *Pom file name , default = pom.xml* `}`
-- **build\_tool: maven** 		`{` *build tools you are using, we support maven and gradle more tools will be added* `}`
 - **settings\_file\_path: .** 	`{` *maven settings file path if you need push package, default *. `}`
-- **settings\_file\_-name: settings.xml** 	`{` *maven settings file name if you need push package, default settings.xml* `}`
+- **settings\_file\_name: settings.xml** 	`{` *maven settings file name if you need push package, default settings.xml* `}`
 - **az\_artifact\_repository\_pat: ${{secrets.AZURE\_ARTIFACT\_PAT}}** 	`{` *you repository token to use for connecting to Azure package repository* `}`
+- **build\_stage: clean deploy**  `{` *stages to run as part of the build* `}`
 
 ### Push Image built to ACR
 
-#### call: DigitalInnovation/cloud-devsecops-pipelineactions/workflows/push\_image@main
+#### call: DigitalInnovation/cloud-devsecops-pipelineactions/workflows/push\_image@latest
 
 Inputs:
 
@@ -35,7 +34,7 @@ Inputs:
 
 ### SNYK Scan
 
-#### call: gDigitalInnovation/cloud-devsecops-pipelineactions/workflows/appsec@main
+#### call: gDigitalInnovation/cloud-devsecops-pipelineactions/workflows/appsec@latest
 
 Input:
 
@@ -43,7 +42,7 @@ Input:
 
 ### Fortify Scan
 
-#### call: DigitalInnovation/cloud-devsecops-pipelineactions/workflows/Fortify@main
+#### call: DigitalInnovation/cloud-devsecops-pipelineactions/workflows/Fortify@latest
 
 Input:
 
