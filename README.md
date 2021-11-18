@@ -2,7 +2,7 @@ M&amp;S Internal GitHub composite actions
 
 ## Summary :
 
-This Repository is used to store all composite actions that other projects and applicaiton teams can use to enhance their github actions pipeline.
+This repository is used to store reusable composite actions that other product teams can use to enhance their github actions pipeline.
 
 ## List of Actions and link to use
 
