@@ -29,7 +29,7 @@ Inputs:
 
 - **cr\_imagename: 'nginx'**  					`{` *docker image name* `}`
 - **cr\_imagetag: ${{ github.run\_id }}** 		`{` *docker image tag* `}`
-- **cr\_username: ${{ secrets.ACR\_USER }****} 		`{` *containder registry user* `}`
+- **cr\_username: ${{ secrets.ACR\_USER }}** 		`{` *containder registry user* `}`
 - **cr\_password: ${{ secrets.ACR\_PASS }}** 		`{` *containder registry password* `}`
 - **cr\_servername: ${{ secrets.ACR\_SERVER }}** 	`{` *containder registry servername* `}`
 
