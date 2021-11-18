@@ -1,0 +1,55 @@
+# Appsec Composite action
+name: 'DevSecOps Application Security Actions'
+description: 'Running Fority Security Scans for project codes'
+
+inputs:
+  fod_release_id:
+    required: true
+  fod_api_key:
+    required: true
+  fod_api_secret:
+    required: true
+  project_name:
+    required: true
+  project_src_path:
+    required: true
+    default: ./src
+  
+runs:
+  using: "composite"
+  
+  steps:
+    - run: echo Hello, You are Executing Composite action to Run FOTIFY Scan
+      shell: bash
+    - run: ls -lart
+      shell: bash
+    # Java 8 required by ScanCentral Client and FoD Uploader(Univeral CI Tool)
+    - name: Setup Java
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+
+    - name: wget FodUpload.jar 
+      run: |
+         sudo wget -c https://github.com/fod-dev/fod-uploader-java/releases/download/v5.2.1/FodUpload.jar  
+         pwd
+         ls -lrt
+      shell: bash
+    - name: Zip the source 
+      run: |
+         sudo apt install zip
+         zip -r ${{inputs.project_name}}_fortify.zip .
+         ls
+      shell: bash
+
+    - name: Upload and Scan
+      run: |
+          java -jar FodUpload.jar -ac ${{ inputs.fod_api_key }} ${{ inputs.fod_api_secret }} -rid ${{ inputs.fod_release_id }} -purl ${{ env.FOD_PORTAL_URL }} -apiurl ${{ env.FOD_API_URL }} -z ${{inputs.project_name}}_fortify.zip -ep 2 -a 2 -rp 0 -pp 1 -apf -I 1    
+          status=$?
+          echo test $status
+      shell: bash
+      env:
+        FOD_PORTAL_URL: https://emea.fortify.com
+        FOD_API_URL: https://api.emea.fortify.com
+      
+            

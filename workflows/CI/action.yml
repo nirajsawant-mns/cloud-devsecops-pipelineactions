@@ -1,0 +1,70 @@
+# ci_build.yml
+name: 'Build and push Artifact'
+description: 'Building and Pushing Artifact to Azure Artifact Repository'
+inputs:
+  build_tool:
+    required: true
+    default: maven
+  pom_path:
+    required: false
+    default: .
+  pom_file_name:
+    required: false
+    default: pom.xml
+  settings_file_path:
+    required: false
+    default: .
+  settings_file_name:
+    required: false
+    default: settings.xml
+  az_artifact_repository_pat:
+    required: false
+  
+   
+runs:
+  using: "composite"
+  steps:
+    - run: echo Hello, You are Executing Composite action to Execute Build
+      shell: bash
+    - run: ls -lart
+      shell: bash
+    
+    - name: Maven Build and Publish to Azure Artifacts
+      if: ${{ inputs.build_tool == 'maven' || inputs.build_tool == 'mvn' }}
+      run: |
+        mvn clean install -f ./${{ inputs.pom_path }}/${{ inputs.pom_file_name }}
+      shell: bash  
+      
+    
+    - name: Unit_Test
+      run : | 
+        echo Running Unit Test 
+        mvn test -f ./${{ inputs.pom_path }}/${{ inputs.pom_file_name }}
+      shell: bash
+            
+    
+    - name: Validate Gradle wrapper
+      if: ${{ inputs.build_tool == 'gradle' }}
+      uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+      
+    - name: Build with Gradle
+      if: ${{ inputs.build_tool == 'gradle' }}
+      run: ./gradlew build
+      shell: bash
+      
+        
+    
+    - name: Deploy Artifact
+      run : |
+        echo 'Testing - completed'
+        mvn deploy -s ./${{ inputs.settings_file_path }}/${{ inputs.settings_file_name }} -Dazrepo.pat=${{ inputs.az_artifact_repository_pat }} -f ./${{ inputs.pom_path }}/${{ inputs.pom_file_name }}
+      shell: bash 
+      
+      
+    - name: calling another composite action
+      id: foo
+      uses: gopinath-velayudhan-mns/shared_composite_repo/workflows/sample@main
+      with:
+        who-to-greet: 'Mona the Octocat'
+    - run: echo random-number ${{ steps.foo.outputs.random-number }}
+      shell: bash

@@ -1,0 +1,51 @@
+# Appsec Composite action
+name: 'DevSecOps Application Security Actions'
+description: 'Running Security Scans for project codes'
+inputs:
+  snyk_token:
+    required: true
+  prisma_user:
+    required: false
+  prisma_password:
+    required: false
+  prisma_url:
+    required: false
+  
+  docker_image_name:
+    required: false
+  docker_image_tag:
+    required: false
+    
+runs:
+  using: "composite"
+  steps:
+    - run: echo Hello, You are Executing Composite action to Execute Build
+      shell: bash
+    - run: ls -lart
+      shell: bash
+      
+    - name: check Snyk token provided
+      if: ${{ inputs.snyk_token }}
+      run: echo SNYK token is provided running SNYK scan for the project
+      shell: bash
+    - name: Snyk SCA Scanning
+      run: |
+        echo "----------Download Latest Snyk CLI-----------"
+        curl -Lo ./snyk "https://github.com/snyk/snyk/releases/download/v1.683.0/snyk-linux"
+        chmod +x snyk
+        ls -lrt
+        echo ./snyk auth ${{inputs.snyk_token}}
+        ./snyk auth ${{inputs.snyk_token}}
+        ./snyk test --all-projects
+        ./snyk monitor --all-projects
+      shell: bash  
+    - name: Run Prisma Cloud Scan
+      if: ${{ inputs.prisma_user && inputs.prisma_password }}
+      run: |
+        curl --user ${{ inputs.prisma_user }}:${{ inputs.prisma_password }} --output ./twistcli ${{ inputs.prisma_url }}/api/v1/util/twistcli
+        chmod a+x ./twistcli     
+      shell: bash
+    - name: Scan the image using Prisma Cloud
+      if: ${{ inputs.prisma_user && inputs.prisma_password }}
+      run: ./twistcli images scan --address ${{ inputs.prisma_url  }} --user ${{ inputs.prisma_user }} --password ${{ inputs.prisma_password }} --details ${{inputs.docker_image_name}}:${{inputs.docker_image_tag}}
+      shell: bash
