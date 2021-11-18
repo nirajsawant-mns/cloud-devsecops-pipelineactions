@@ -52,3 +52,8 @@ Input:
 - **fod\_api\_secret: ${{ secrets.FOD\_API\_SECRET}}** 	`{` *FOS secret* `}`
 - **project\_name: sample**  							`{` *name of the project ( used to great the zip file)* `}`
 - **project\_src\_path: ./src** 						`{` *location of source to Zip for FOS push* `}`
+
+### Coming Soon...
+
+#### Prisma Scan
+#### SonarQube
