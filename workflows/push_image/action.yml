@@ -4,9 +4,9 @@ description: 'Pushing Docker image to Container Registry'
 inputs:
   who-to-greet:  # id of input
     required: true
-  cr_packagename:
+  cr_imagename:
     required: true
-  cr_packagetag:
+  cr_imagetag:
     required: true
   cr_username:
     required: true
@@ -26,7 +26,7 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - run: echo Hello, You are Executing REUSABLE Action from ACTION1 with Inputs ${{ inputs.who-to-greet }} ${{inputs.acr_packagename}} ${{inputs.acr_servername}}.
+    - run: echo Hello, You are Executing REUSABLE Action from ACTION1 with Inputs ${{ inputs.who-to-greet }} ${{inputs.cr_imagename}} ${{inputs.cr_servername}}.
       shell: bash
     - id: random-number-generator
       run: echo "::set-output name=random-id::$(echo $RANDOM)"
@@ -46,8 +46,8 @@ runs:
         password: ${{inputs.cr_password}}
         login-server: ${{inputs.cr_servername}}  
     - run: |
-        echo runningg command: docker push ${{ inputs.cr_servername }}/${{inputs.cr_packagename}}:${{ inputs.cr_packagetag }}  
-        docker push ${{ inputs.cr_servername }}/${{inputs.cr_packagename}}:${{ inputs.cr_packagetag }}
+        echo runningg command: docker push ${{ inputs.cr_servername }}/${{inputs.cr_imagename}}:${{ inputs.cr_imagetag }}  
+        docker push ${{ inputs.cr_servername }}/${{inputs.cr_imagename}}:${{ inputs.cr_imagetag }}
       shell: bash
 
 #########  Switching over to Github Packages ##########
@@ -61,7 +61,7 @@ runs:
 #      run: |
 #        echo =================  Pushing to Github Packages ======================
 #        docker images
-#        docker tag  ${{ inputs.cr_servername }}/${{inputs.cr_packagename}}:${{ inputs.cr_packagetag }} ghcr.io/${{ github.actor }}/${{inputs.cr_packagename}}:${{ inputs.cr_packagetag }}
+#        docker tag  ${{ inputs.cr_servername }}/${{inputs.cr_imagename}}:${{ inputs.cr_imagetag }} ghcr.io/${{ github.actor }}/${{inputs.cr_imagename}}:${{ inputs.cr_imagetag }}
 #        docker images
-#        docker push ghcr.io/${{ github.actor }}/${{inputs.cr_packagename}}:${{ inputs.cr_packagetag }}
+#        docker push ghcr.io/${{ github.actor }}/${{inputs.cr_imagename}}:${{ inputs.cr_imagetag }}
 #      shell: bash
