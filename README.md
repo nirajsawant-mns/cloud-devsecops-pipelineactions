@@ -2,16 +2,16 @@
 
 M&amp;S Internal GitHub composite actions
 
-##Summary :
+\##Summary :
 
-`	`This Repository is used to store all composite actions that other projects and applicaiton teams can use to enhance their github actions pipeline.
+This Repository is used to store all composite actions that other projects and applicaiton teams can use to enhance their github actions pipeline.
 
-##List of Actions and link to use
+\##List of Actions and link to use
 
 
-###CI maven Build and Package Push:
+\###CI maven Build and Package Push:
 
-####call:  DigitalInnovation/mns-central-actions/workflows/CI@v1
+\####call:  DigitalInnovation/mns-central-actions/workflows/CI@v1
 
 inputs:
 
@@ -27,7 +27,7 @@ inputs:
 
 -az\_artifact\_repository\_pat: ${{secrets.AZURE\_ARTIFACT\_PAT}} 	# you repository token to use for connecting to Azure package repository
 
-###Push Image built to ACR
+\###Push Image built to ACR
 
 ####call: DigitalInnovation/mns-central-actions/workflows/push\_image@main
 
