@@ -49,7 +49,7 @@ runs:
           echo test $status
       shell: bash
       env:
-        FOD_PORTAL_URL: https://emea.fortify.com
-        FOD_API_URL: https://api.emea.fortify.com
+        FOD_PORTAL_URL: https://emea.fortify.com/
+        FOD_API_URL: https://api.emea.fortify.com/
       
             
