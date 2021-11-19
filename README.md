@@ -1,5 +1,5 @@
 # Cloud DevSecOps Composite actions repository
-
+![Public repository attention](https://img.icons8.com/ios/32/000000/error--v1.png)
 **Please note** this repository is **Public** and as such no sensitive data should be stored. 
 
 ## Summary :
