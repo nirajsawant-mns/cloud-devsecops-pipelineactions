@@ -1,4 +1,6 @@
-M&amp;S Internal GitHub composite actions
+# Cloud DevSecOps Composite actions repository
+
+**Please note** this repository is **Public** and as such no sensitive data should be stored. 
 
 ## Summary :
 
