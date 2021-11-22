@@ -4,9 +4,30 @@ description: 'Running Security Scans for project codes'
 inputs:
   project_name:
     required: true
+    
+  run_snyk_scan:
+    required: false
+    default: 'false'
   snyk_token:
     required: true
-      
+    
+  run_prisma_scan:
+    required: false
+    default: 'false'
+  prisma_user:
+    required: false
+  prisma_password:
+    required: false
+  prisma_url:
+    required: false
+  docker_image_name:
+    required: false
+  docker_image_tag:
+    required: false
+    
+  run_fortify_scan:
+    required: false
+    default: 'false'  
   fod_release_id:
     required: true
   fod_api_key:
@@ -19,71 +40,53 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: echo Hello, You are Executing Composite action to Execute Build
-      shell: bash
-    - run: ls -lart
-      shell: bash
-      
-    - name: check Snyk token provided
-      if: ${{ inputs.snyk_token }}
-      run: echo SNYK token is provided running SNYK scan for the project
-      shell: bash
-    - name: Snyk SCA Scanning
-      run: |
-        echo "----------Download Latest Snyk CLI-----------"
-        curl -Lo ./snyk "https://github.com/snyk/snyk/releases/download/v1.683.0/snyk-linux"
-        chmod +x snyk
-        ls -lrt
-        echo ./snyk auth ${{inputs.snyk_token}}
-        ./snyk auth ${{inputs.snyk_token}}
-        ./snyk test --all-projects
-        ./snyk monitor --all-projects
-      shell: bash  
+  - run: echo  argument for run_snyk_scan = ${{inputs.run_snyk_scan}}
+    shell: bash
+    if: ${{inputs.run_snyk_scan == true &&  inputs.snyk_token }}
+  - name: Snyk SCA Scanning
+    run: |
+      echo SNYK token is provided running SNYK scan for the project
+      echo "----------Download Latest Snyk CLI-----------"
+      curl -Lo ./snyk "https://github.com/snyk/snyk/releases/download/v1.683.0/snyk-linux"
+      chmod +x snyk
+      ls -lrt
+      echo ./snyk auth ${{inputs.snyk_token}}
+      ./snyk auth ${{inputs.snyk_token}}
+      ./snyk test --all-projects
+      ./snyk monitor --all-projects
+    shell: bash 
       
  
  
-
-    - name: Run Create Zip for Fortify scan and push for Scan
-      run: ls -lart
-      shell: bash
-    # Java 8 required by ScanCentral Client and FoD Uploader(Univeral CI Tool)
-    - name: Setup Java
-      uses: actions/setup-java@v1
-      with:
-        java-version: 1.8
-
-    - name: wget FodUpload.jar 
-      run: |
-         sudo wget -c https://github.com/fod-dev/fod-uploader-java/releases/download/v5.2.1/FodUpload.jar  
-         pwd
-         ls -lrt
-      shell: bash
-    - name: Zip the source 
-      run: |
-         sudo apt install zip
-         zip -r ${{inputs.project_name}}_fortify.zip .
-         ls
-      shell: bash
-
-    - name: Upload and Scan
-      run: |
-          java -jar FodUpload.jar -ac ${{ inputs.fod_api_key }} ${{ inputs.fod_api_secret }} -rid ${{ inputs.fod_release_id }} -purl ${{ env.FOD_PORTAL_URL }} -apiurl ${{ env.FOD_API_URL }} -z ${{inputs.project_name}}_fortify.zip -ep 2 -a 2 -rp 0 -pp 1 -apf -I 1    
-      shell: bash
-      env:
-        FOD_PORTAL_URL: https://emea.fortify.com/
-        FOD_API_URL: https://api.emea.fortify.com/
+  - run: echo  argument for run_fortify_scan = ${{inputs.run_fortify_scan}}
+    shell: bash
+  - name: Fortify Scan Create sorce Zip upload to FOD for Scanning
+    if: ${{inputs.run_fortify_scan == true }}
+    uses: actions/setup-java@v1
+    with:
+      java-version: 1.8
+  - name: Download fortify executable and run scan 
+    if: ${{inputs.run_fortify_scan == true }}
+    run: |
+       sudo wget -c https://github.com/fod-dev/fod-uploader-java/releases/download/v5.2.1/FodUpload.jar  
+       sudo apt install zip
+       zip -r ${{inputs.project_name}}_fortify.zip .
+       java -jar FodUpload.jar -ac ${{ inputs.fod_api_key }} ${{ inputs.fod_api_secret }} -rid ${{ inputs.fod_release_id }} -purl ${{ env.FOD_PORTAL_URL }} -apiurl ${{ env.FOD_API_URL }} -z ${{inputs.project_name}}_fortify.zip -ep 2 -a 2 -rp 0 -pp 1 -apf -I 1    
+    shell: bash
+    env:
+      FOD_PORTAL_URL: https://emea.fortify.com/
+      FOD_API_URL: https://api.emea.fortify.com/
 
 
 
-
-    - name: Run Prisma Scan for Repository
-      if: ${{ inputs.prisma_user && inputs.prisma_password }}
-      run: |
-        curl --user ${{ inputs.prisma_user }}:${{ inputs.prisma_password }} --output ./twistcli ${{ inputs.prisma_url }}/api/v1/util/twistcli
-        chmod a+x ./twistcli     
-      shell: bash
-    - name: Scan the image using Prisma Cloud
-      if: ${{ inputs.prisma_user && inputs.prisma_password }}
-      run: ./twistcli images scan --address ${{ inputs.prisma_url  }} --user ${{ inputs.prisma_user }} --password ${{ inputs.prisma_password }} --details ${{inputs.docker_image_name}}:${{inputs.docker_image_tag}}
-      shell: bash
+  - name: Run Prisma Scan for Repository
+    if: ${{ inputs.prisma_user && inputs.prisma_password }}
+    run: |
+      curl --user ${{ inputs.prisma_user }}:${{ inputs.prisma_password }} --output ./twistcli ${{ inputs.prisma_url }}/api/v1/util/twistcli
+      chmod a+x ./twistcli     
+    shell: bash
+  - name: Scan the image using Prisma Cloud
+    if: ${{ inputs.prisma_user && inputs.prisma_password }}
+    run: ./twistcli images scan --address ${{ inputs.prisma_url  }} --user ${{ inputs.prisma_user }} --password ${{ inputs.prisma_password }} --details ${{inputs.docker_image_name}}:${{inputs.docker_image_tag}}
+    shell: bash
 
