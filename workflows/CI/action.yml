@@ -13,13 +13,14 @@ inputs:
     default: pom.xml
   settings_file_path:
     required: false
-    default: .
   settings_file_name:
     required: false
-    default: settings.xml
-  build_stages: 
+  mvn_build_arguments:
     required: false
-    default: 'clean install deploy'
+    
+  build_phases: 
+    required: false
+    default: 'clean package install '
     
   az_artifact_repository_pat:
     required: false
@@ -34,18 +35,34 @@ runs:
       shell: bash
     
     - name: Maven Build and Publish to Azure Artifacts
-      if: ${{ inputs.build_tool == 'maven' || inputs.build_tool == 'mvn' }}
+      if: |
+        ${{ inputs.build_tool == 'maven' || inputs.build_tool == 'mvn' }} &&
+        contains( ${{ inputs.build_phases }}, 'install' )
+        contains( ${{ inputs.build_phases }}, 'package' )
       run: |
-        mvn clean install -f ./${{ inputs.pom_path }}/${{ inputs.pom_file_name }}
+        mvn clean install -f ./${{ inputs.pom_path }}/${{ inputs.pom_file_name }} ${{inputs.mvn_build_arguments}}
       shell: bash  
       
     
     - name: Unit_Test
+      if: |
+        ${{ inputs.build_tool == 'maven' || inputs.build_tool == 'mvn' }} &&
+        contains( ${{ inputs.build_phases }}, 'test' )
       run : | 
         echo Running Unit Test 
-        mvn test -f ./${{ inputs.pom_path }}/${{ inputs.pom_file_name }}
+        mvn test -f ./${{ inputs.pom_path }}/${{ inputs.pom_file_name }} ${{inputs.mvn_build_arguments}}
       shell: bash
-            
+      
+    - name: Deploy Artifact
+      if: |
+        ${{ inputs.build_tool == 'maven' || inputs.build_tool == 'mvn' }} &&
+        ${{ inputs.settings_file_name }} &&
+        contains( ${{ inputs.build_phases }}, 'deploy' )
+      run : |
+        echo 'Testing - completed'
+        mvn deploy -s ./${{ inputs.settings_file_path }}/${{ inputs.settings_file_name }} -f ./${{ inputs.pom_path }}/${{ inputs.pom_file_name }} ${{inputs.mvn_build_arguments}}
+      shell: bash  
+
     
     - name: Validate Gradle wrapper
       if: ${{ inputs.build_tool == 'gradle' }}
@@ -58,11 +75,7 @@ runs:
       
         
     
-    - name: Deploy Artifact
-      run : |
-        echo 'Testing - completed'
-        mvn deploy -s ./${{ inputs.settings_file_path }}/${{ inputs.settings_file_name }} -Dazrepo.pat=${{ inputs.az_artifact_repository_pat }} -f ./${{ inputs.pom_path }}/${{ inputs.pom_file_name }}
-      shell: bash 
+    
       
       
     - name: calling another composite action
