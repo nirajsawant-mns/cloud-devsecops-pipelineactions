@@ -9,7 +9,7 @@ inputs:
     required: false
     default: 'false'
   snyk_token:
-    required: true
+    required: false
     
   run_prisma_scan:
     required: false
@@ -42,8 +42,8 @@ runs:
   steps:
   - run: echo  argument for run_snyk_scan = ${{inputs.run_snyk_scan}}
     shell: bash
-    if: ${{inputs.run_snyk_scan == true &&  inputs.snyk_token }}
   - name: Snyk SCA Scanning
+    if: ${{inputs.run_snyk_scan == true &&  inputs.snyk_token }}
     run: |
       echo SNYK token is provided running SNYK scan for the project
       echo "----------Download Latest Snyk CLI-----------"
