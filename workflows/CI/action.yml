@@ -40,7 +40,7 @@ runs:
         contains( ${{ inputs.build_phases }}, 'install' )
         contains( ${{ inputs.build_phases }}, 'package' )
       run: |
-        mvn clean install ${{inputs.mvn_build_arguments}} -f ./${{ inputs.pom_path }}/${{ inputs.pom_file_name }} -s ./${{ inputs.settings_file_path }}/${{ inputs.settings_file_name }}
+        mvn clean install ${{inputs.maven_build_arguments}} -f ./${{ inputs.pom_path }}/${{ inputs.pom_file_name }} -s ./${{ inputs.settings_file_path }}/${{ inputs.settings_file_name }}
       shell: bash  
       
     
@@ -50,7 +50,7 @@ runs:
         contains( ${{ inputs.build_phases }}, 'test' )
       run : | 
         echo Running Unit Test 
-        mvn test ${{inputs.mvn_build_arguments}} -f ./${{ inputs.pom_path }}/${{ inputs.pom_file_name }} -s ./${{ inputs.settings_file_path }}/${{ inputs.settings_file_name }}
+        mvn test ${{inputs.maven_build_arguments}} -f ./${{ inputs.pom_path }}/${{ inputs.pom_file_name }} -s ./${{ inputs.settings_file_path }}/${{ inputs.settings_file_name }}
       shell: bash
       
     - name: Deploy Artifact
@@ -60,7 +60,7 @@ runs:
         contains( ${{ inputs.build_phases }}, 'deploy' )
       run : |
         echo 'Testing - completed'
-        mvn deploy -s ./${{ inputs.settings_file_path }}/${{ inputs.settings_file_name }} -f ./${{ inputs.pom_path }}/${{ inputs.pom_file_name }} ${{inputs.mvn_build_arguments}}
+        mvn deploy -s ./${{ inputs.settings_file_path }}/${{ inputs.settings_file_name }} -f ./${{ inputs.pom_path }}/${{ inputs.pom_file_name }} ${{inputs.maven_build_arguments}}
       shell: bash  
 
     
