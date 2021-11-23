@@ -49,17 +49,18 @@ runs:
         ${{ inputs.build_tool == 'maven' || inputs.build_tool == 'mvn' }} &&
         contains( ${{ inputs.build_phases }}, 'test' )
       run : | 
-        echo Running Unit Test 
+        echo Running Unit Test - ${{ inputs.build_phases }}
         mvn test ${{inputs.maven_build_arguments}} -f ./${{ inputs.pom_path }}/${{ inputs.pom_file_name }} -s ./${{ inputs.settings_file_path }}/${{ inputs.settings_file_name }}
+        echo 'Test Phase - completed'
       shell: bash
       
     - name: Deploy Artifact
       if: |
+        contains( ${{ inputs.build_phases }}, 'deploy' ) &&
         ${{ inputs.build_tool == 'maven' || inputs.build_tool == 'mvn' }} &&
-        ${{ inputs.settings_file_name }} &&
-        contains( ${{ inputs.build_phases }}, 'deploy' )
+        ${{ inputs.settings_file_name }}         
       run : |
-        echo 'Testing - completed'
+        echo Executing Phase Deploy - ${{ inputs.build_phases }}
         mvn deploy -s ./${{ inputs.settings_file_path }}/${{ inputs.settings_file_name }} -f ./${{ inputs.pom_path }}/${{ inputs.pom_file_name }} ${{inputs.maven_build_arguments}}
       shell: bash  
 
