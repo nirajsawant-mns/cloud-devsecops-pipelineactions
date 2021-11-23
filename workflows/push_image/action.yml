@@ -2,37 +2,29 @@
 name: 'Push docker images'
 description: 'Pushing Docker image to Container Registry'
 inputs:
-  who-to-greet:  # id of input
-    required: true
+  
   cr_imagename:
     required: true
   cr_imagetag:
     required: true
-  cr_username:
+  cr_dockerfile_name:
     required: true
-  cr_password:
+  cr_dockerfile_path:
     required: true
   cr_servername:
     description: “server name of the ACR”
     required: true
+  cr_username:
+    required: false
+  cr_password:
+    required: flase
   
-outputs:
-  random-number:
-    description: "Random number"
-    value: ${{ steps.random-number-generator.outputs.random-id }}
     
     
     
 runs:
   using: "composite"
   steps:
-    - run: echo Hello, You are Executing REUSABLE Action from ACTION1 with Inputs ${{ inputs.who-to-greet }} ${{inputs.cr_imagename}} ${{inputs.cr_servername}}.
-      shell: bash
-    - id: random-number-generator
-      run: echo "::set-output name=random-id::$(echo $RANDOM)"
-      shell: bash
-    #- run: ${{ github.action_path }}/goodbye.sh
-    #  shell: bash
     - run: ls -lart
       shell: bash
     - run: docker images
@@ -40,15 +32,31 @@ runs:
       
 ########### Login and Push image to Azure Container Registry ##############
 
-    - uses: Azure/docker-login@v1
-      with:
-        username: ${{inputs.cr_username}}
-        password: ${{inputs.cr_password}}
-        login-server: ${{inputs.cr_servername}}  
-    - run: |
-        echo runningg command: docker push ${{ inputs.cr_servername }}/${{inputs.cr_imagename}}:${{ inputs.cr_imagetag }}  
-        docker push ${{ inputs.cr_servername }}/${{inputs.cr_imagename}}:${{ inputs.cr_imagetag }}
-      shell: bash
+#     - name: Log in with Azure
+#       uses: azure/login@v1
+#       with:
+#         creds: '${{ inputs.AZURE_CREDENTIALS }}'
+                   
+    - name: Build and Push Docker to ACR
+       
+      run:|
+        az acr login -n ${{ inputs.cr_servername }} --username ${{inputs.cr_username}} --password ${{inputs.cr_password}}
+        az acr build --registry ${{ inputs.cr_servername }} --image ${{inputs.cr_imagename}}:${{ inputs.cr_imagetag }} --file ./${{inputs.cr_dockerfile_path}}/${{inputs.cr_dockerfile_name}}" . 
+   
+
+
+#     - uses: Azure/docker-login@v1
+#       with:
+#         username: ${{inputs.cr_username}}
+#         password: ${{inputs.cr_password}}
+#         login-server: ${{inputs.cr_servername}}  
+#     - run: |
+#         echo runningg command: docker push ${{ inputs.cr_servername }}/${{inputs.cr_imagename}}:${{ inputs.cr_imagetag }}  
+#         docker push ${{ inputs.cr_servername }}/${{inputs.cr_imagename}}:${{ inputs.cr_imagetag }}
+#       shell: bash
+
+
+
 
 #########  Switching over to Github Packages ##########
 #    - name: Log in to the GITHUB Container registry
