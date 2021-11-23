@@ -15,7 +15,7 @@ inputs:
     required: false
   settings_file_name:
     required: false
-  mvn_build_arguments:
+  maven_build_arguments:
     required: false
     
   build_phases: 
