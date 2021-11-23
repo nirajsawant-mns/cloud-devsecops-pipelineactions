@@ -43,8 +43,7 @@ runs:
     
     - name: Unit_Test
       if:  ${{ inputs.build_tool == 'maven' || inputs.build_tool == 'mvn' }} 
-      run :
-      echo Running Unit Test - ${{ inputs.build_phases }}
+      run : echo Running Unit Test - ${{ inputs.build_phases }}
       shell: bash
       if:  contains( ${{ inputs.build_phases }}, 'test' ) 
       run : | 
