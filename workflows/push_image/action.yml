@@ -37,12 +37,11 @@ runs:
 #       with:
 #         creds: '${{ inputs.AZURE_CREDENTIALS }}'
                    
-    - name: Build and Push Docker to ACR
-       
-      run:|
+    - name: Build and Push Docker to ACR       
+      run: |
         az acr login -n ${{ inputs.cr_servername }} --username ${{inputs.cr_username}} --password ${{inputs.cr_password}}
         az acr build --registry ${{ inputs.cr_servername }} --image ${{inputs.cr_imagename}}:${{ inputs.cr_imagetag }} --file ./${{inputs.cr_dockerfile_path}}/${{inputs.cr_dockerfile_name}}" . 
-   
+      shell: bash
 
 
 #     - uses: Azure/docker-login@v1
