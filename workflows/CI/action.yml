@@ -34,10 +34,7 @@ inputs:
   cq_token:
     required: false
  
-  
-           
-  
-   
+    
 runs:
   using: "composite"
   steps:
@@ -73,8 +70,12 @@ runs:
            -Dsonar.projectKey=${{inputs.cq_project_key}} 
            -Dsonar.host.url=${{inputs.cq_host_url}} 
            -Dsonar.login=${{inputs.cq_token}} ${{inputs.maven_build_arguments}}
-           
       shell: bash
+    
+    
+    
+    
+    
     
     - name: Validate Gradle wrapper
       if: ${{ inputs.build_tool == 'gradle' }}
