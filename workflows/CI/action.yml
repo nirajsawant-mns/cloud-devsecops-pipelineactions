@@ -69,7 +69,7 @@ runs:
       shell: bash  
       
     - name: Code Quality Analysis
-      if: ( $ {{ inputs.run_code_analysis == true }}  
+      if: ${{ inputs.run_code_analysis == 'true' }}  
       run: -Dsonar.projectKey=${{inputs.cq_project_key}} 
            -Dsonar.host.url=${{inputs.cq_host_url}} 
            -Dsonar.login=ded56a134206ae4c823f775ac74e99ab9fa44687 
