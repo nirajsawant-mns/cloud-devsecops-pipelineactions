@@ -69,7 +69,8 @@ runs:
       
     - name: Code Quality Analysis
       if: ${{ inputs.run_code_analysis == 'true' }}  
-      run: -Dsonar.projectKey=${{inputs.cq_project_key}} 
+      run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.3.0.603:sonar
+           -Dsonar.projectKey=${{inputs.cq_project_key}} 
            -Dsonar.host.url=${{inputs.cq_host_url}} 
            -Dsonar.login=${{inputs.cq_token}}
       shell: bash
