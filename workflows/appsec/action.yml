@@ -5,7 +5,7 @@ inputs:
   project_name:
     required: true
     
-  run_snyk_scan:
+  run_dependency_scan:
     required: false
     default: 'false'
   snyk_token:
@@ -25,7 +25,7 @@ inputs:
   docker_image_tag:
     required: false
     
-  run_fortify_scan:
+  run_sast_scan:
     required: false
     default: 'false'  
   fod_release_id:
@@ -35,7 +35,10 @@ inputs:
   fod_api_secret:
     required: true
   
-     
+  run_dast_scan:   
+    required: false
+  run_container_scan:
+    required: false
     
 runs:
   using: "composite"
