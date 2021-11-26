@@ -8,7 +8,7 @@ inputs:
   run_dependency_scan:
     required: false
     default: 'false'
-  snyk_token:
+  dependency_scan_token:
     required: false
     
   run_prisma_scan:
@@ -28,11 +28,11 @@ inputs:
   run_sast_scan:
     required: false
     default: 'false'  
-  fod_release_id:
+  sast_release_id:
     required: true
-  fod_api_key:
+  sast_api_key:
     required: true
-  fod_api_secret:
+  sast_api_secret:
     required: true
   
   run_dast_scan:   
@@ -46,15 +46,15 @@ runs:
   - run: echo  argument for run_snyk_scan = ${{inputs.run_snyk_scan}}
     shell: bash
   - name: Snyk SCA Scanning
-    if: ${{inputs.run_snyk_scan == 'true' &&  inputs.snyk_token }}
+    if: ${{inputs.run_dependency_scan == 'true' &&  inputs.dependency_scan_token }}
     run: |
       echo SNYK token is provided running SNYK scan for the project
       echo "----------Download Latest Snyk CLI-----------"
       curl -Lo ./snyk "https://github.com/snyk/snyk/releases/download/v1.683.0/snyk-linux"
       chmod +x snyk
       ls -lrt
-      echo ./snyk auth ${{inputs.snyk_token}}
-      ./snyk auth ${{inputs.snyk_token}}
+      echo ./snyk auth ${{inputs.dependency_scan_token}}
+      ./snyk auth ${{inputs.dependency_scan_token}}
       ./snyk test --all-projects
       ./snyk monitor --all-projects
     shell: bash 
@@ -64,7 +64,7 @@ runs:
   - run: echo  argument for run_fortify_scan = ${{inputs.run_fortify_scan}}
     shell: bash
   - name: Fortify Scan Create sorce Zip upload to FOD for Scanning
-    if: ${{inputs.run_fortify_scan == 'true' }}
+    if: ${{inputs.run_sast_scan == 'true' }}
     uses: actions/setup-java@v1
     with:
       java-version: 1.8
