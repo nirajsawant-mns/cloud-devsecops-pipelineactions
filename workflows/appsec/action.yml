@@ -84,13 +84,13 @@ runs:
       SAST_OPTIONS: '-ep 2 -a 2 -rp 0 -pp 1 -apf -I 1'
 
 
-  - name: Run Containder Scan for Repostiory
+  - name: Run Container Scan for Repostiory
     run: echo "----"
     shell: bash
     if: always()
     
   - name: Run Prisma Scan for Repository
-    if: always() && ${{ inputs.container_scan_user && inputs.containder_scan_password }}
+    if: ${{ inputs.run_container_scan == 'true' }}
     run: |
       curl --user ${{ inputs.container_scan_user }}:${{ inputs.container_scan_password }} --output ./twistcli ${{ inputs.container_scan_url }}/api/v1/util/twistcli
       chmod a+x ./twistcli     
