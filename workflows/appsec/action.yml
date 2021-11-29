@@ -7,23 +7,12 @@ inputs:
     
   run_dependency_scan:
     required: false
-    default: 'false'
   dependency_scan_token:
     required: false
+  dependency_scan_arguments:
+    required: false
     
-  run_prisma_scan:
-    required: false
-    default: 'false'
-  prisma_user:
-    required: false
-  prisma_password:
-    required: false
-  prisma_url:
-    required: false
-  docker_image_name:
-    required: false
-  docker_image_tag:
-    required: false
+  
     
   run_sast_scan:
     required: false
@@ -37,9 +26,21 @@ inputs:
   
   run_dast_scan:   
     required: false
+    
   run_container_scan:
     required: false
-    
+  container_scan_user:
+    required: false
+  container_scan_password:
+    required: false
+  container_scan_url:
+    required: false
+  docker_image_name:
+    required: false
+  docker_image_tag:
+    required: false
+  
+  
 runs:
   using: "composite"
   steps:
@@ -61,7 +62,7 @@ runs:
       
  
  
-  - run: echo  argument for run_fortify_scan = ${{inputs.run_fortify_scan}}
+  - run: echo  argument for run_fortify_scan = ${{inputs.run_sast_scan}}
     shell: bash
   - name: Fortify Scan Create sorce Zip upload to FOD for Scanning
     if: ${{inputs.run_sast_scan == 'true' }}
@@ -69,27 +70,31 @@ runs:
     with:
       java-version: 1.8
   - name: Download fortify executable and run scan 
-    if: ${{inputs.run_fortify_scan == 'true' }}
+    if: ${{inputs.run_sast_scan == 'true' }}
     run: |
        sudo wget -c https://github.com/fod-dev/fod-uploader-java/releases/download/v5.2.1/FodUpload.jar  
        sudo apt install zip
        zip -r ${{inputs.project_name}}_fortify.zip .
-       java -jar FodUpload.jar -ac ${{ inputs.fod_api_key }} ${{ inputs.fod_api_secret }} -rid ${{ inputs.fod_release_id }} -purl ${{ env.FOD_PORTAL_URL }} -apiurl ${{ env.FOD_API_URL }} -z ${{inputs.project_name}}_fortify.zip -ep 2 -a 2 -rp 0 -pp 1 -apf -I 1    
+       java -jar FodUpload.jar -ac ${{ inputs.fod_sast_key }} ${{ inputs.sast_api_secret }} -rid ${{ inputs.sast_release_id }} -purl ${{ env.SAST_PORTAL_URL }} -apiurl ${{ env.SAST_API_URL }} -z ${{inputs.project_name}}_fortify.zip ${{ env.SAST_OPTIONS }}    
     shell: bash
     env:
-      FOD_PORTAL_URL: https://emea.fortify.com/
-      FOD_API_URL: https://api.emea.fortify.com/
+      SAST_PORTAL_URL: https://emea.fortify.com/
+      SAST_API_URL: https://api.emea.fortify.com/
+      SAST_OPTIONS: '-ep 2 -a 2 -rp 0 -pp 1 -apf -I 1'
 
 
 
   - name: Run Prisma Scan for Repository
-    if: ${{ inputs.prisma_user && inputs.prisma_password }}
+    if: ${{ inputs.container_scan_user && inputs.containder_scan_password }}
     run: |
-      curl --user ${{ inputs.prisma_user }}:${{ inputs.prisma_password }} --output ./twistcli ${{ inputs.prisma_url }}/api/v1/util/twistcli
+      curl --user ${{ inputs.container_scan_user }}:${{ inputs.container_scan_password }} --output ./twistcli ${{ inputs.container_scan_url }}/api/v1/util/twistcli
       chmod a+x ./twistcli     
     shell: bash
   - name: Scan the image using Prisma Cloud
-    if: ${{ inputs.prisma_user && inputs.prisma_password }}
-    run: ./twistcli images scan --address ${{ inputs.prisma_url  }} --user ${{ inputs.prisma_user }} --password ${{ inputs.prisma_password }} --details ${{inputs.docker_image_name}}:${{inputs.docker_image_tag}}
+    if: ${{ inputs.cs_username && inputs.cs_password }}
+    run: |
+      ./twistcli images scan --address ${{ inputs.container_scan_url }} --user ${{ inputs.container_scan_user }} --password ${{ inputs.container_scan_password }} --details ${{inputs.docker_image_name}}:${{inputs.docker_image_tag}}
+      ./twistcli images scan --address ${{ inputs.container_scan_url }} --user ${{ inputs.container_scan_user }} --password ${{ inputs.container_scan_password }} --containerized --details ${{inputs.docker_image_name}}:${{inputs.docker_image_tag}}
     shell: bash
-
+    
+    
