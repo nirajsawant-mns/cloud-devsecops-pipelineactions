@@ -47,7 +47,6 @@ runs:
   - run: echo  argument for run_dependency_scan = ${{inputs.run_dependency_scan}}
     shell: bash
   - name: Snyk SCA Scanning
-    continue-on-error: true
     if: ${{inputs.run_dependency_scan == 'true' &&  inputs.dependency_scan_token }}
     run: |
       echo SNYK token is provided running SNYK scan for the project
@@ -72,7 +71,6 @@ runs:
     with:
       java-version: 1.8
   - name: Download fortify executable and run scan 
-    continue-on-error: true
     if: ${{inputs.run_sast_scan == 'true' }}
     run: |
        sudo wget -c https://github.com/fod-dev/fod-uploader-java/releases/download/v5.2.1/FodUpload.jar  
