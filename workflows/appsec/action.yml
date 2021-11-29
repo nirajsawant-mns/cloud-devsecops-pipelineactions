@@ -96,7 +96,7 @@ runs:
       chmod a+x ./twistcli     
     shell: bash
   - name: Scan the image using Prisma Cloud
-    if: ${{ inputs.cs_username && inputs.cs_password }}
+    if: ${{ inputs.run_container_scan == 'true' }}
     run: |
       ./twistcli images scan --address ${{ inputs.container_scan_url }} --user ${{ inputs.container_scan_user }} --password ${{ inputs.container_scan_password }} --details ${{inputs.docker_image_name}}:${{inputs.docker_image_tag}}
       ./twistcli images scan --address ${{ inputs.container_scan_url }} --user ${{ inputs.container_scan_user }} --password ${{ inputs.container_scan_password }} --containerized --details ${{inputs.docker_image_name}}:${{inputs.docker_image_tag}}
