@@ -36,8 +36,8 @@ runs:
     - name: Build and Push Docker to ACR       
       run: |
         
-        az login --username ${{inputs.cr_username}} --password ${{inputs.cr_password}} --tenant ${{inputs.cr_tenant}}
-        az acr login -n ${{ inputs.cr_servername }} --username ${{inputs.cr_username}} --password ${{inputs.cr_password}} --subscription ${{inputs.cr_subscription}}
+        #az login --username ${{inputs.cr_username}} --password ${{inputs.cr_password}} --tenant ${{inputs.cr_tenant}}
+        az acr login -n ${{ inputs.cr_servername }} --username ${{inputs.cr_username}} --password ${{inputs.cr_password}} 
         docker images
         az acr build --registry ${{ inputs.cr_servername }} -t ${{ inputs.cr_servername }}/${{inputs.cr_imagename}}:${{ inputs.cr_imagetag }} --file ./${{inputs.cr_dockerfile_path}}${{inputs.cr_dockerfile_name}} .
       shell: bash
