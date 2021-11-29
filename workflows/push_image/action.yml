@@ -37,7 +37,7 @@ runs:
       run: |
         
         #az login --username ${{inputs.cr_username}} --password ${{inputs.cr_password}} --tenant ${{inputs.cr_tenant}}
-        az acr login -n ${{ inputs.cr_servername }} --username ${{inputs.cr_username}} --password ${{inputs.cr_password}} 
+        az acr login -n ${{ inputs.cr_servername }} --username ${{inputs.cr_username}} --password ${{inputs.cr_password}} --subscription 'da62005e-ffbb-483c-8af3-929e423ed9ce'
         docker images
         az acr build --registry ${{ inputs.cr_servername }} -t ${{ inputs.cr_servername }}/${{inputs.cr_imagename}}:${{ inputs.cr_imagetag }} --file ./${{inputs.cr_dockerfile_path}}${{inputs.cr_dockerfile_name}} .
       shell: bash
