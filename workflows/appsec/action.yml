@@ -6,7 +6,7 @@ inputs:
     required: true
     
   run_dependency_scan:
-    required: false
+    required: true
   dependency_scan_token:
     required: false
   dependency_scan_arguments:
@@ -15,7 +15,7 @@ inputs:
   
     
   run_sast_scan:
-    required: false
+    required: true
     default: 'false'  
   sast_release_id:
     required: true
@@ -56,8 +56,8 @@ runs:
       ls -lrt
       echo ./snyk auth ${{inputs.dependency_scan_token}}
       ./snyk auth ${{inputs.dependency_scan_token}}
-      ./snyk test --all-projects
-      ./snyk monitor --all-projects
+      ./snyk test --all-projects -- ${{inputs.dependency_scan_arguments}}
+      ./snyk monitor --all-projects -- ${{inputs.dependency_scan_arguments}}
     shell: bash 
       
  
