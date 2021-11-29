@@ -75,7 +75,7 @@ runs:
        sudo wget -c https://github.com/fod-dev/fod-uploader-java/releases/download/v5.2.1/FodUpload.jar  
        sudo apt install zip
        zip -r ${{inputs.project_name}}_fortify.zip .
-       java -jar FodUpload.jar -ac ${{ inputs.fod_sast_key }} ${{ inputs.sast_api_secret }} -rid ${{ inputs.sast_release_id }} -purl ${{ env.SAST_PORTAL_URL }} -apiurl ${{ env.SAST_API_URL }} -z ${{inputs.project_name}}_fortify.zip ${{ env.SAST_OPTIONS }}    
+       java -jar FodUpload.jar -ac ${{ inputs.sast_api_key }} ${{ inputs.sast_api_secret }} -rid ${{ inputs.sast_release_id }} -purl ${{ env.SAST_PORTAL_URL }} -apiurl ${{ env.SAST_API_URL }} -z ${{inputs.project_name}}_fortify.zip ${{ env.SAST_OPTIONS }}    
     shell: bash
     env:
       SAST_PORTAL_URL: https://emea.fortify.com/
