@@ -65,12 +65,12 @@ runs:
   - run: echo  argument for run_fortify_scan = ${{inputs.run_sast_scan}}
     shell: bash
   - name: Fortify Scan Create sorce Zip upload to FOD for Scanning
-    if: ${{inputs.run_sast_scan == 'true' }}
+    if: always() && ${{inputs.run_sast_scan == 'true' }}
     uses: actions/setup-java@v1
     with:
       java-version: 1.8
   - name: Download fortify executable and run scan 
-    if: ${{inputs.run_sast_scan == 'true' }}
+    if: always() && ${{inputs.run_sast_scan == 'true' }}
     run: |
        sudo wget -c https://github.com/fod-dev/fod-uploader-java/releases/download/v5.2.1/FodUpload.jar  
        sudo apt install zip
@@ -85,7 +85,7 @@ runs:
 
 
   - name: Run Prisma Scan for Repository
-    if: ${{ inputs.container_scan_user && inputs.containder_scan_password }}
+    if: always() && ${{ inputs.container_scan_user && inputs.containder_scan_password }}
     run: |
       curl --user ${{ inputs.container_scan_user }}:${{ inputs.container_scan_password }} --output ./twistcli ${{ inputs.container_scan_url }}/api/v1/util/twistcli
       chmod a+x ./twistcli     
