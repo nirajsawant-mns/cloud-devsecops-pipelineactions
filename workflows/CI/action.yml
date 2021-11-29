@@ -89,12 +89,12 @@ runs:
         
     
     
-      ############ Test Ignore ##########
+#       ############ Test Ignore ##########
       
-    - name: calling another composite action
-      id: foo
-      uses: gopinath-velayudhan-mns/shared_composite_repo/workflows/sample@main
-      with:
-        who-to-greet: 'Mona the Octocat'
-    - run: echo random-number ${{ steps.foo.outputs.random-number }}
-      shell: bash
+#     - name: calling another composite action
+#       id: foo
+#       uses: gopinath-velayudhan-mns/shared_composite_repo/workflows/sample@main
+#       with:
+#         who-to-greet: 'Mona the Octocat'
+#     - run: echo random-number ${{ steps.foo.outputs.random-number }}
+#       shell: bash
