@@ -57,7 +57,7 @@ runs:
         echo 'Test Phase - completed'
       shell: bash
       
-    - name: Deploy and Publish Artifact
+    - name: Publish built artifact to Artifact repository
       if: ${{ (inputs.build_tool == 'maven' || inputs.build_tool == 'mvn') && contains( inputs.build_phases , 'deploy' ) && inputs.settings_file_name }}   
       run : |
         echo Executing Phase Deploy - ${{ inputs.build_phases }}
