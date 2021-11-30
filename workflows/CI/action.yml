@@ -5,10 +5,10 @@ inputs:
   build_tool:
     required: true
     default: maven
-  pom_path:
+  build_file_path:
     required: false
     default: .
-  pom_file_name:
+  build_file_name:
     required: false
     default: pom.xml
   settings_file_path:
