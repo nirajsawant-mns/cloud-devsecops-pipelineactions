@@ -32,41 +32,42 @@ inputs:
 
 #### call: DigitalInnovation/cloud-devsecops-pipelineactions/workflows/push\_image@latest
 
-Inputs:
-
 - **cr\_imagename: 'nginx'**  					`{` *docker image name* `}`
 - **cr\_imagetag: ${{ github.run\_id }}** 		`{` *docker image tag* `}`
-- **cr\_username: ${{ secrets.ACR\_USER }}** 		`{` *containder registry user* `}`
-- **cr\_password: ${{ secrets.ACR\_PASS }}** 		`{` *containder registry password* `}`
-- **cr\_servername: ${{ secrets.ACR\_SERVER }}** 	`{` *containder registry servername* `}`
+- **cr\_username: ${{ secrets.ACR\_USER }}** 		`{` *container registry user* `}`
+- **cr\_password: ${{ secrets.ACR\_PASS }}** 		`{` *container registry password* `}`
+- **cr\_servername: ${{ secrets.ACR\_SERVER }}** 	`{` *container registry servername* `}`
+- **cr_dockerfile_name: Dockerfile** 	`{` *dockerfile name* `}`
+- **cr_dockerfile_path: ci-helper/** 	`{` *relative path of the docker file* `}`
+- **cr_subscription: ${{ secrets.ACR\_subscription }}** 	`{` *container registry subscription* `}`  
+- **cr_tenant: ${{ secrets.ACR\_tenant }}** 	`{` *container registry tenant* `}`  
 
-### SNYK Scan
+ 
 
-#### call: gDigitalInnovation/cloud-devsecops-pipelineactions/workflows/appsec@latest
+#### call: DigitalInnovation/cloud-devsecops-pipelineactions/workflows/appsec@latest
 
-Input:
+### Parameters for Dependency (SNYK) Scan
 
-- **snyk\_token: ${{ secrets.SNYK\_TOKEN }}** 	`{` *snyk token to update the* `}`
+- **run_dependency_scan: true/false** 	`{` *flag to execute dependency scan* `}`
+- **dependency\_scan\_token: ${{ secrets.SNYK\_TOKEN }}** 	`{` *snyk token * `}`
+- **dependency\_scan\_arguments: -Dkey=value** 	`{` *snyk maven arguments to pass* `}`
 
-### Fortify Scan
+### parameters for SAST (Fortify) Scan
 
-#### call: DigitalInnovation/cloud-devsecops-pipelineactions/workflows/Fortify@latest
-
-Input:
-
-- **fod\_release\_id: ${{ secrets.FOD\_RELEASE\_ID }}** 	`{` *your FOD project Release ID* `}`
-- **fod\_api\_key: ${{ secrets.FOD\_API\_KEY}}** 			`{` *FOD key* `}`
-- **fod\_api\_secret: ${{ secrets.FOD\_API\_SECRET}}** 	`{` *FOS secret* `}`
+- **run_sast_scan: true/false** 	`{` *flag to execute sast scan* `}`
+- **sast\_release\_id: ${{ secrets.FOD\_RELEASE\_ID }}** 	`{` *your FOD project Release ID* `}`
+- **sast\_api\_key: ${{ secrets.FOD\_API\_KEY}}** 			`{` *FOD key* `}`
+- **sast\_api\_secret: ${{ secrets.FOD\_API\_SECRET}}** 	`{` *FOS secret* `}`
 - **project\_name: sample**  							`{` *name of the project ( used to great the zip file)* `}`
 - **project\_src\_path: ./src** 						`{` *location of source to Zip for FOS push* `}`
 
-#### Prisma Scan
+#### Parameters for Container(Prisma) Scan
 
-- **run_container_scan: ${{ secrets.FOD\_RELEASE\_ID }}** 	`{` *your FOD project Release ID* `}`
-- **container_scan_user: ${{ secrets.FOD\_API\_KEY}}** 			`{` *FOD key* `}`
-- ** container_scan_password: ${{ secrets.FOD\_API\_SECRET}}** 	`{` *FOS secret* `}`
-- **container_scan_url: sample**  							`{` *name of the project ( used to great the zip file)* `}`
-- **docker_image_name: ./src** 						`{` *location of source to Zip for FOS push* `}`
-- **docker_image_tag: ./src** 						`{` *location of source to Zip for FOS push* `}`
+- **run_container_scan: true/false** 	`{` *flag to execute container scan* `}`
+- **container_scan_user: ${{ secrets.username}}** 			`{` *container scan url user* `}`
+- **container_scan_password: ${{ secrets.password}}** 	`{` *container scan url password* `}`
+- **container_scan_url: sample**  							`{` *url of the container scan tool* `}`
+- **docker_image_name: ./src** 						`{` *docker image name to scan* `}`
+- **docker_image_tag: ./src** 						`{` *docker image tag to scan* `}`
 
 
