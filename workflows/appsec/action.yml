@@ -56,8 +56,8 @@ runs:
       ls -lrt
       echo ./snyk auth ${{inputs.dependency_scan_token}}
       ./snyk auth ${{inputs.dependency_scan_token}}
-      ./snyk test --all-projects -- ${{inputs.dependency_scan_arguments}}
-      ./snyk monitor --all-projects -- ${{inputs.dependency_scan_arguments}}
+      ./snyk test --all-projects -- ${{inputs.dependency_scan_arguments}}  || true
+      #./snyk monitor --all-projects -- ${{inputs.dependency_scan_arguments}}
     shell: bash 
       
  
