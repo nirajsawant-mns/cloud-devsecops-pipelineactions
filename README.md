@@ -70,15 +70,3 @@ Input:
 - **docker_image_tag: ./src** 						`{` *location of source to Zip for FOS push* `}`
 
 
-    required: false
-  
-    required: false
- 
-    required: false
-  
-    required: false
-  
-    required: false
-  
-    required: false
-#### SonarQube
