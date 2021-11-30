@@ -6,13 +6,13 @@
 
 This repository is used to store reusable composite actions that other product teams can use to enhance their github actions pipeline.
 
-### List of Actions and parameters available to call the actions
+#### List of Actions and parameters available to call the actions
 
 ### CI maven Build and Package Push:
 
-## call:  DigitalInnovation/cloud-devsecops-pipelineactions/workflows/CI@latest
+#### call:  DigitalInnovation/cloud-devsecops-pipelineactions/workflows/CI@latest
 
-### inputs:
+##### inputs:
 - **build\_tool: maven**  -- Required		`{` *build tools you are using, we support maven and gradle more tools will be added* `}`
 - **pom\_path: .** 				 `{` *path to the pom file default = .* `}`
 - **pom\_file\_name: pom.xml** `{` *Pom file name , default = pom.xml* `}`
@@ -26,11 +26,11 @@ This repository is used to store reusable composite actions that other product t
 - **cq_host_url: clean deploy**  `{` *Url of the Code Scanner Destination* `}`
 - **cq_token: clean deploy**  `{` *Token to authenticate to the Project `}`
 
-## Push Image built to ACR
+### Push Image built to ACR
 
-## call: DigitalInnovation/cloud-devsecops-pipelineactions/workflows/push\_image@latest
+#### call: DigitalInnovation/cloud-devsecops-pipelineactions/workflows/push\_image@latest
 
-### inputs:
+##### inputs:
 - **cr\_imagename: 'nginx'**  					`{` *docker image name* `}`
 - **cr\_imagetag: ${{ github.run\_id }}** 		`{` *docker image tag* `}`
 - **cr\_username: ${{ secrets.ACR\_USER }}** 		`{` *container registry user* `}`
@@ -43,15 +43,15 @@ This repository is used to store reusable composite actions that other product t
 
  
 
-## call: DigitalInnovation/cloud-devsecops-pipelineactions/workflows/appsec@latest
+#### call: DigitalInnovation/cloud-devsecops-pipelineactions/workflows/appsec@latest
 
-### Parameters for Dependency (SNYK) Scan
+##### Parameters for Dependency (SNYK) Scan
 
 - **run_dependency_scan: true/false** 	`{` *flag to execute dependency scan* `}`
 - **dependency\_scan\_token: ${{ secrets.SNYK\_TOKEN }}** 	`{` *snyk token * `}`
 - **dependency\_scan\_arguments: -Dkey=value** 	`{` *snyk maven arguments to pass* `}`
 
-### parameters for SAST (Fortify) Scan
+##### parameters for SAST (Fortify) Scan
 
 - **run_sast_scan: true/false** 	`{` *flag to execute sast scan* `}`
 - **sast\_release\_id: ${{ secrets.FOD\_RELEASE\_ID }}** 	`{` *your FOD project Release ID* `}`
@@ -60,7 +60,7 @@ This repository is used to store reusable composite actions that other product t
 - **project\_name: sample**  							`{` *name of the project ( used to great the zip file)* `}`
 - **project\_src\_path: ./src** 						`{` *location of source to Zip for FOS push* `}`
 
-### Parameters for Container(Prisma) Scan
+##### Parameters for Container(Prisma) Scan
 
 - **run_container_scan: true/false** 	`{` *flag to execute container scan* `}`
 - **container_scan_user: ${{ secrets.username}}** 			`{` *container scan url user* `}`
