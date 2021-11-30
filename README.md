@@ -3,10 +3,11 @@
 **Please note** this repository is **Public** and as such no sensitive data should be stored. 
 
 ## Summary :
-
 This repository is used to store reusable composite actions that other product teams can use to enhance their github actions pipeline.
 
+
 #### List of Actions and parameters available to call the actions
+
 
 ### CI maven Build and Package Push:
 
@@ -19,12 +20,15 @@ This repository is used to store reusable composite actions that other product t
 - **settings\_file\_path: .** 	`{` *maven settings file path if you need push package, default *. `}`
 - **settings\_file\_name: settings.xml** 	`{` *maven settings file name if you need push package, default settings.xml* `}`
 - **build\_phases: clean deploy**  `{` *stages to run as part of the build* `}`
-- **maven\_build\_arguments: "-Dkey1=value1 -Dkey2=value2 .." **  `{` *additional maven arguments to be passed for the build execution* `}`
+- **maven\_build\_arguments: -Dkey1=value1 -Dkey2=value2**  `{` *additional maven arguments to be passed for the build execution* `}`
 - **az\_artifact\_repository\_pat: ${{secrets.AZURE\_ARTIFACT\_PAT}}** 	`{` *you repository token to use for connecting to Azure package repository* if not already in setting.xml`}`
 - **run\_code\_analysis:: true/false**  `{` *Flag to run Code Quality Scan* `}`
 - **cq_project_key: CMTEST**  `{` *codeQulaity project key* `}`
 - **cq_host_url: clean deploy**  `{` *Url of the Code Scanner Destination* `}`
 - **cq_token: clean deploy**  `{` *Token to authenticate to the Project `}`
+
+</br>
+</br>
 
 ### Push Image built to ACR
 
@@ -41,8 +45,10 @@ This repository is used to store reusable composite actions that other product t
 - **cr_subscription: ${{ secrets.ACR\_subscription }}** 	`{` *container registry subscription* `}`  
 - **cr_tenant: ${{ secrets.ACR\_tenant }}** 	`{` *container registry tenant* `}`  
 
- 
+</br>
+</br>
 
+### Run Application Security Scan.
 #### call: DigitalInnovation/cloud-devsecops-pipelineactions/workflows/appsec@latest
 
 ##### Parameters for Dependency (SNYK) Scan
@@ -69,4 +75,5 @@ This repository is used to store reusable composite actions that other product t
 - **docker_image_name: ./src** 						`{` *docker image name to scan* `}`
 - **docker_image_tag: ./src** 						`{` *docker image tag to scan* `}`
 
+</br>
 
