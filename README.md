@@ -6,14 +6,13 @@
 
 This repository is used to store reusable composite actions that other product teams can use to enhance their github actions pipeline.
 
-## List of Actions and link to use
-
+### List of Actions and parameters available to call the actions
 
 ### CI maven Build and Package Push:
 
-#### call:  DigitalInnovation/cloud-devsecops-pipelineactions/workflows/CI@latest
+## call:  DigitalInnovation/cloud-devsecops-pipelineactions/workflows/CI@latest
 
-inputs:
+### inputs:
 - **build\_tool: maven**  -- Required		`{` *build tools you are using, we support maven and gradle more tools will be added* `}`
 - **pom\_path: .** 				 `{` *path to the pom file default = .* `}`
 - **pom\_file\_name: pom.xml** `{` *Pom file name , default = pom.xml* `}`
@@ -22,16 +21,16 @@ inputs:
 - **build\_phases: clean deploy**  `{` *stages to run as part of the build* `}`
 - **maven\_build\_arguments: "-Dkey1=value1 -Dkey2=value2 .." **  `{` *additional maven arguments to be passed for the build execution* `}`
 - **az\_artifact\_repository\_pat: ${{secrets.AZURE\_ARTIFACT\_PAT}}** 	`{` *you repository token to use for connecting to Azure package repository* if not already in setting.xml`}`
-- 
 - **run\_code\_analysis:: true/false**  `{` *Flag to run Code Quality Scan* `}`
 - **cq_project_key: CMTEST**  `{` *codeQulaity project key* `}`
 - **cq_host_url: clean deploy**  `{` *Url of the Code Scanner Destination* `}`
 - **cq_token: clean deploy**  `{` *Token to authenticate to the Project `}`
 
-### Push Image built to ACR
+## Push Image built to ACR
 
-#### call: DigitalInnovation/cloud-devsecops-pipelineactions/workflows/push\_image@latest
+## call: DigitalInnovation/cloud-devsecops-pipelineactions/workflows/push\_image@latest
 
+### inputs:
 - **cr\_imagename: 'nginx'**  					`{` *docker image name* `}`
 - **cr\_imagetag: ${{ github.run\_id }}** 		`{` *docker image tag* `}`
 - **cr\_username: ${{ secrets.ACR\_USER }}** 		`{` *container registry user* `}`
@@ -44,7 +43,7 @@ inputs:
 
  
 
-#### call: DigitalInnovation/cloud-devsecops-pipelineactions/workflows/appsec@latest
+## call: DigitalInnovation/cloud-devsecops-pipelineactions/workflows/appsec@latest
 
 ### Parameters for Dependency (SNYK) Scan
 
@@ -61,7 +60,7 @@ inputs:
 - **project\_name: sample**  							`{` *name of the project ( used to great the zip file)* `}`
 - **project\_src\_path: ./src** 						`{` *location of source to Zip for FOS push* `}`
 
-#### Parameters for Container(Prisma) Scan
+### Parameters for Container(Prisma) Scan
 
 - **run_container_scan: true/false** 	`{` *flag to execute container scan* `}`
 - **container_scan_user: ${{ secrets.username}}** 			`{` *container scan url user* `}`
